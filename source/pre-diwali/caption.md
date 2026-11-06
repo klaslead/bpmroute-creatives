@@ -1,4 +1,4 @@
-# Pre-Diwali 2026 posters – BPMroute (6 Nov 2026, 2 days to Diwali)
+# Pre-Diwali 2026 posters – BPMroute (scheduled 7 Nov 2026, 1 day to Diwali)
 
 Each poster comes in feed (1080x1350, FB + IG) and story (1080x1920, IG/FB story).
 Suggested order: post 1 today, then the others across 6–8 Nov, or post all 5 as one carousel.
@@ -12,11 +12,11 @@ Story tip: add a link sticker to bpmroute.com.
 
 दिवाली आ रही है 🪔
 
-Diwali is 71% loaded. ⏳
+Diwali is 92% loaded. ⏳
 
 Diyas out for delivery. Kaju katli mysteriously disappearing. Mom asking you to clean your room (and, honestly, your hard drive too). 😄
 
-Two days to go. Get the house, the heart and your next release ready. When BPMroute launches, your Diwali track goes from "final_final_v7.wav" to mastered and on every streaming platform. Free to start. 👉 bpmroute.com
+One day to go. Get the house, the heart and your next release ready. When BPMroute launches, your Diwali track goes from "final_final_v7.wav" to mastered and on every streaming platform. Free to start. 👉 bpmroute.com
 
 Which notification are you getting most this week? 👇
 
@@ -26,13 +26,13 @@ Which notification are you getting most this week? 👇
 
 **Instagram**
 
-दिवाली आ रही है 🪔 Diwali is loading… 71% ⏳
+दिवाली आ रही है 🪔 Diwali is loading… 92% ⏳
 
 🪔 12 diyas out for delivery
 🍬 "Who finished the kaju katli??"
 ✨ Your Diwali track: mastered
 
-2 days to go. Get the house, the heart and your next release ready.
+1 day to go. Get the house, the heart and your next release ready.
 BPMroute is coming soon, free to start. Link in bio → bpmroute.com
 
 Drop a 🪔 if you're already in Diwali mode.
@@ -169,7 +169,7 @@ BPMroute by EKSTAC33 Production
 
 Turn up the lights.
 
-Nine diyas, one EQ curve, preset: Deepavali. Two days to go, so start boosting the warmth now. 😉
+Nine diyas, one EQ curve, preset: Deepavali. One day to go, so start boosting the warmth now. 😉
 
 May your home glow on every frequency, and may your next track hit every one of them too.
 
@@ -186,7 +186,7 @@ Happy Diwali in advance from all of us. 🙏
 Turn up the lights. 🪔🎛️
 
 Preset: DEEPAVALI. 9 diyas, every frequency glowing.
-2 days to go ✨
+1 day to go ✨
 
 May your home glow and your tracks hit every frequency.
 BPMroute is coming soon, free to start → link in bio, bpmroute.com

@@ -99,7 +99,7 @@ def p1_main(size):
     ]
     if big:
         notes.insert(2, ('linear-gradient(135deg,#9b7bff,#5ee7ff)', '🧹', 'Reminders', '1h ago', 'Clean the house. Then clean the mix. Then the hard drive.'))
-    pct = 71
+    pct = 92
     r = 108
     circ = 2 * math.pi * r
     ring = f"""<svg width="280" height="280" viewBox="0 0 280 280"><defs>{DEFS}</defs>
@@ -111,7 +111,7 @@ def p1_main(size):
     for bg, emo, app, t, msg in notes:
         icon = f'<div class="ic" style="background:{bg}">{emo}</div>' if emo else f'<div class="ic bp">{MARK}</div>'
         items += f'<div class="note glass">{icon}<div class="nt"><div class="nh"><b>{app}</b><span>{t}</span></div><div class="nm">{msg}</div></div></div>'
-    return f"""<div class="lock"><div class="widget glass">{ring}<div class="wt"><div class="wl">DIWALI</div><div class="wn">{pct}%</div><div class="wd">2 days to go · Sun, 8 Nov</div></div></div>
+    return f"""<div class="lock"><div class="widget glass">{ring}<div class="wt"><div class="wl">DIWALI</div><div class="wn">{pct}%</div><div class="wd">1 day to go · Sun, 8 Nov</div></div></div>
 <div class="stack">{items}</div></div>"""
 
 
@@ -323,7 +323,7 @@ def p5_main(size):
 
 POSTERS = [
     dict(name='pre-diwali-01-loading', pill='PRE-DIWALI', hindi='दिवाली आ रही है',
-         h1='Diwali is <em>loading.</em>', sub='2 days to go. Get the house, the heart and your next release ready.',
+         h1='Diwali is <em>loading.</em>', sub='1 day to go. Get the house, the heart and your next release ready.',
          art={'main': p1_main, 'css': P1_CSS},
          blobs=[(-200, 160, 640, '#9b7bff', .4), (620, 60, 560, '#ffb547', .3), (300, 820, 600, '#ff5ecf', .28)]),
     dict(name='pre-diwali-02-ep', pill='NOW PLAYING', hindi='त्योहार का प्लेलिस्ट',
@@ -338,7 +338,7 @@ POSTERS = [
          h1='Louder than <em>crackers.</em>', sub='Celebrate with sound, not smoke. Turn the music up and keep the sky clear.',
          art={'main': p4_main, 'bg': ''},
          blobs=[(-120, 0, 640, '#9b7bff', .3), (560, -60, 620, '#ff5ecf', .24), (240, 700, 600, '#ffb547', .2)], h1px=100),
-    dict(name='pre-diwali-05-lights', pill='2 DAYS TO GO', hindi='शुभ दीपावली',
+    dict(name='pre-diwali-05-lights', pill='1 DAY TO GO', hindi='शुभ दीपावली',
          h1='Turn up <em>the lights.</em>', sub='May your home glow and your tracks hit every frequency.',
          art={'main': p5_main},
          blobs=[(-160, 300, 640, '#ffb547', .3), (600, 200, 560, '#ff5ecf', .24), (240, 880, 620, '#9b7bff', .26)]),
