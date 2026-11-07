@@ -25,7 +25,7 @@ header span{font-size:40px;font-weight:700;letter-spacing:-1px}
 .pill{margin-left:auto;font-size:21px;font-weight:600;letter-spacing:4px;padding:12px 24px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,211,110,.35);color:#ffd36e;backdrop-filter:blur(20px)}
 main{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 main svg.art{width:100%%;height:100%%}
-.bn{font-family:"Galada","Hind Siliguri",serif;font-size:58px;line-height:1.2;color:#ffd36e;margin-bottom:2px;text-shadow:0 0 30px rgba(255,180,60,.45)}
+.bn{display:inline-block;font-family:"Atma","Galada",serif;font-weight:700;font-size:86px;line-height:1.15;padding:0 6px 6px 0;margin-bottom:4px;background:linear-gradient(100deg,#fff3c4 0%%,#ffd36e 30%%,#ffb547 60%%,#ff8a5e 85%%,#ff5ecf);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(255,170,60,.45)) drop-shadow(0 0 50px rgba(155,123,255,.35))}
 h1{font-size:%(h1)dpx;line-height:1;font-weight:800;letter-spacing:-4px}
 h1 em{font-style:normal;background:linear-gradient(90deg,#5ee7ff,#9b7bff 45%%,#ff5ecf);-webkit-background-clip:text;background-clip:text;color:transparent}
 .copy{margin-top:26px}
