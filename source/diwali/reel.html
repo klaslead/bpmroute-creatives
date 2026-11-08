@@ -1,0 +1,510 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Happy Diwali reel</title>
+<link rel="stylesheet" href="fonts/g.css">
+<script src="data.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Inter,Arial,sans-serif;color:#f5f5f7;position:relative}
+canvas{position:absolute;inset:0}
+.layer{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute;will-change:transform,opacity}
+.mk{width:100%;height:100%}
+#header{left:80px;right:80px;top:150px;display:flex;align-items:center;gap:22px}
+#header .tile{width:76px;height:76px}
+#header span{font-size:40px;font-weight:700;letter-spacing:-1px}
+.pill{margin-left:auto;font-size:21px;font-weight:600;letter-spacing:4px;padding:12px 24px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,211,110,.35);color:#ffd36e;backdrop-filter:blur(20px)}
+#footer{left:80px;right:80px;top:1690px;display:flex;justify-content:space-between;font-size:26px;color:rgba(245,245,247,.6)}
+#footer b{color:#f5f5f7;font-weight:600}
+.center{left:0;right:0;text-align:center}
+.word{font-size:150px;font-weight:800;letter-spacing:-5px;line-height:1}
+.grad{background:linear-gradient(90deg,#ffe9a8,#ffb547 40%,#ff5ecf 75%,#9b7bff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.hindi{font-family:"Tiro Devanagari Hindi",serif;color:#ffd36e;text-shadow:0 0 40px rgba(255,180,60,.55)}
+.ch{display:inline-block;will-change:transform,opacity,filter}
+#title{top:600px}
+#t-hindi{font-size:96px;margin-bottom:6px}
+#t-happy{font-size:250px;font-weight:800;letter-spacing:-10px;line-height:.95}
+#t-diwali{font-size:270px;font-weight:800;letter-spacing:-11px;line-height:1;padding-bottom:20px}
+#t-sub{font-size:42px;color:rgba(245,245,247,.75);margin-top:10px;letter-spacing:-.5px}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.035));border:1.5px solid rgba(255,255,255,.24);backdrop-filter:blur(36px) saturate(180%);-webkit-backdrop-filter:blur(36px) saturate(180%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.08),0 40px 100px rgba(0,0,0,.6)}
+#card{left:80px;width:920px;top:830px;height:560px;border-radius:56px;padding:44px;overflow:hidden}
+#card .row{display:flex;gap:36px;align-items:center}
+#art{width:210px;height:210px;border-radius:30px;overflow:hidden;flex:none;position:relative;background:#07050a;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+#art canvas{position:absolute;inset:0;width:210px;height:210px}
+.meta small{font-size:20px;letter-spacing:4px;color:rgba(245,245,247,.55);font-weight:600}
+.meta h2{font-size:62px;font-weight:800;letter-spacing:-2px;margin:6px 0 4px}
+.meta .by{font-size:30px;color:#ffd36e;font-weight:600}
+.meta .tag{font-size:24px;color:rgba(245,245,247,.55);margin-top:6px}
+#wave{height:96px;margin:34px 0 14px;display:flex;align-items:center;gap:6px}
+#wave i{flex:1;border-radius:6px;background:linear-gradient(180deg,#ffe9a8,#ffb547 50%,#ff5ecf)}
+#bar{height:8px;border-radius:8px;background:rgba(255,255,255,.14);position:relative}
+#bar b{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:linear-gradient(90deg,#ffd36e,#ff5ecf)}
+#bar u{position:absolute;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#fff;box-shadow:0 0 20px #ffb547}
+.times{display:flex;justify-content:space-between;font-size:20px;color:rgba(245,245,247,.5);margin-top:12px;font-variant-numeric:tabular-nums}
+#sheen{position:absolute;top:-50%;bottom:-50%;width:240px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:rotate(18deg)}
+#wish{top:1430px;font-size:42px;line-height:1.3;color:rgba(245,245,247,.8);padding:0 90px}
+#wish em{font-style:normal;color:#ffd36e}
+#build{top:1500px}
+#presents{top:1460px;font-size:26px;letter-spacing:14px;font-weight:600;color:rgba(245,245,247,.7)}
+#logo{left:410px;top:560px;width:260px;height:260px}
+#brand{top:860px;font-size:128px;font-weight:800;letter-spacing:-5px}
+#hd{top:1020px;font-size:66px;font-weight:800;letter-spacing:-2px}
+#svc{top:1130px;font-size:32px;color:rgba(245,245,247,.7);letter-spacing:.5px}
+#cta{left:50%;top:1230px;font-size:34px;font-weight:600;padding:22px 44px;border-radius:999px;white-space:nowrap;transform-origin:50% 50%}
+#cta b{color:#ffd36e}
+#fade{background:#000}
+#flash{background:radial-gradient(circle at 50% 46%,#fff,#ffe9a8 40%,#ffb547 75%,#ff5ecf)}
+</style></head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div class="layer" id="ui">
+  <div class="abs center" id="presents">BPMROUTE PRESENTS</div>
+  <div class="abs center" id="build"></div>
+
+  <div class="abs center" id="title">
+    <div class="hindi" id="t-hindi">शुभ दीपावली</div>
+    <div id="t-happy"></div>
+    <div id="t-diwali"></div>
+    <div id="t-sub">From our studio to your home.</div>
+  </div>
+
+  <div class="abs glass" id="card">
+    <div id="sheen"></div>
+    <div class="row">
+      <div id="art"><canvas id="artc" width="420" height="420"></canvas></div>
+      <div class="meta">
+        <small>NOW PLAYING · DIWALI 2026</small>
+        <h2>Happy Diwali</h2>
+        <div class="by">BPMroute &amp; You</div>
+        <div class="tag">Festive Master · Lights at full volume</div>
+      </div>
+    </div>
+    <div id="wave"></div>
+    <div id="bar"><b></b><u></u></div>
+    <div class="times"><span id="tcur">0:00</span><span>-∞ · all night</span></div>
+  </div>
+  <div class="abs center" id="wish">May your home glow and your tracks<br>hit <em>every frequency.</em></div>
+
+  <div class="abs" id="logo"></div>
+  <div class="abs center" id="brand"></div>
+  <div class="abs center grad" id="hd">Happy Diwali from all of us</div>
+  <div class="abs center" id="svc">Distribution · AI Mastering · Production</div>
+  <div class="abs glass" id="cta">Free to start · <b>bpmroute.com</b></div>
+
+  <div class="abs" id="header"><div class="tile"></div><span>BPMroute</span><div class="pill">HAPPY DIWALI</div></div>
+  <div class="abs" id="footer"><b>bpmroute.com</b><span>by EKSTAC33 Production</span></div>
+  <div class="abs layer" id="flash"></div>
+  <div class="abs layer" id="fade"></div>
+</div>
+
+<script>
+const MARK = `MARK_SVG`;
+const W = 1080, H = 1920, FPS = DATA.fps, DT = 1 / FPS;
+const $ = id => document.getElementById(id);
+const cv = $('c'), ctx = cv.getContext('2d');
+const fx = document.createElement('canvas'); fx.width = W; fx.height = H; const fctx = fx.getContext('2d');
+const gl = document.createElement('canvas'); gl.width = W / 4; gl.height = H / 4; const gctx = gl.getContext('2d');
+const artc = $('artc'), actx = artc.getContext('2d');
+
+// ---------- helpers ----------
+let seed = 20261108;
+const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = k => 1 - Math.pow(1 - k, 3);
+const eIn = k => k * k * k;
+const eInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const eExpIn = k => k <= 0 ? 0 : Math.pow(2, 10 * k - 10);
+const spring = (k, f = 4.2, d = 5.5) => k <= 0 ? 0 : k >= 3 ? 1 : 1 - Math.exp(-d * k) * Math.cos(f * Math.PI * k);
+const lvl = (f, b) => (DATA.bands[Math.min(f, DATA.bands.length - 1)] || [])[b] || 0;
+const PAL = [['#ffe9a8', '#ffb547'], ['#ff8fe0', '#ff5ecf'], ['#a8f3ff', '#5ee7ff'], ['#c9b8ff', '#9b7bff'], ['#fff3c4', '#ff9f43'], ['#ffd36e', '#ff5ecf']];
+
+for (const el of document.querySelectorAll('#header .tile, #logo')) el.innerHTML = MARK;
+function splitChars(el, text) { el.innerHTML = [...text].map(c => `<span class="ch">${c === ' ' ? '&nbsp;' : c}</span>`).join(''); return [...el.children]; }
+const happyCh = splitChars($('t-happy'), 'Happy');
+const diwaliCh = splitChars($('t-diwali'), 'Diwali.');
+// background-clip:text does not reach transformed children, so each letter carries its own slice of the gradient
+const GSTOPS = ['#ffe9a8', '#ffc65c', '#ffb547', '#ff8a7a', '#ff5ecf', '#c46bff', '#9b7bff', '#7f8bff'];
+diwaliCh.forEach((c, i) => { c.style.backgroundImage = `linear-gradient(90deg,${GSTOPS[i]},${GSTOPS[i + 1]})`; c.style.webkitBackgroundClip = 'text'; c.style.backgroundClip = 'text'; c.style.color = 'transparent'; c.style.paddingBottom = '24px'; });
+const brandCh = splitChars($('brand'), 'BPMroute');
+for (let i = 0; i < 46; i++) $('wave').appendChild(document.createElement('i'));
+const waveBars = [...$('wave').children];
+
+const BUILD = [['Lights.', 2.5, 3.0], ['Sweets.', 3.0, 3.5], ['Family.', 3.5, 4.0], ['Bass.', 4.0, 4.5], ['Turn it all up.', 4.5, 6.0]];
+$('build').innerHTML = BUILD.map((w, i) => `<div class="abs center word ${i === 4 ? 'grad' : ''}" id="bw${i}">${w[0]}</div>`).join('');
+
+// static stars
+const stars = Array.from({ length: 90 }, () => ({ x: rnd() * W, y: rnd() * H, r: .6 + rnd() * 2.2, p: rnd() * 6.28, s: .5 + rnd() * 2, sp: rnd() < .18 }));
+// lanterns
+const lanterns = Array.from({ length: 12 }, (_, i) => ({ x: 60 + rnd() * 960, t0: 7.2 + i * 0.55 + rnd() * .4, sp: 70 + rnd() * 60, s: .55 + rnd() * .6, ph: rnd() * 6 }));
+
+// ---------- draw primitives ----------
+function sparkle(c, x, y, r, a, col = '#ffe9c4') {
+  c.save(); c.globalAlpha = a; c.fillStyle = col; c.translate(x, y); c.beginPath();
+  c.moveTo(0, -r); c.quadraticCurveTo(0, 0, r, 0); c.quadraticCurveTo(0, 0, 0, r); c.quadraticCurveTo(0, 0, -r, 0); c.quadraticCurveTo(0, 0, 0, -r);
+  c.fill(); c.restore();
+}
+function flame(c, x, y, h, t, a = 1) {
+  if (h <= 0.5) return;
+  const fl = 1 + .06 * Math.sin(t * 23) + .04 * Math.sin(t * 37 + 1), sway = 3 * Math.sin(t * 9) * h / 100;
+  h *= fl; const w = h * .42;
+  c.save(); c.globalAlpha = a;
+  let g = c.createRadialGradient(x, y - h * .4, 0, x, y - h * .4, h * 1.5);
+  g.addColorStop(0, 'rgba(255,190,90,.55)'); g.addColorStop(.4, 'rgba(255,120,60,.18)'); g.addColorStop(1, 'rgba(255,94,207,0)');
+  c.fillStyle = g; c.beginPath(); c.arc(x, y - h * .4, h * 1.5, 0, 7); c.fill();
+  const tip = x + sway;
+  c.beginPath(); c.moveTo(tip, y - h);
+  c.bezierCurveTo(x + w * .55, y - h * .55, x + w * .62, y - h * .12, x, y);
+  c.bezierCurveTo(x - w * .62, y - h * .12, x - w * .55, y - h * .55, tip, y - h);
+  g = c.createRadialGradient(x, y - h * .28, 0, x, y - h * .28, h * .8);
+  g.addColorStop(0, '#fff'); g.addColorStop(.25, '#fff3c4'); g.addColorStop(.55, '#ffb547'); g.addColorStop(.85, '#ff5e7a'); g.addColorStop(1, 'rgba(255,94,207,.2)');
+  c.fillStyle = g; c.fill();
+  c.beginPath(); c.moveTo(tip * .3 + x * .7, y - h * .55);
+  c.bezierCurveTo(x + w * .22, y - h * .32, x + w * .24, y - h * .08, x, y - h * .02);
+  c.bezierCurveTo(x - w * .24, y - h * .08, x - w * .22, y - h * .32, tip * .3 + x * .7, y - h * .55);
+  c.fillStyle = 'rgba(255,255,255,.92)'; c.fill();
+  c.restore();
+}
+function diya(c, x, y, w, a = 1) {
+  const h = w * .34;
+  c.save(); c.globalAlpha = a;
+  const g = c.createLinearGradient(0, y, 0, y + h * 1.9);
+  g.addColorStop(0, '#ffe9a8'); g.addColorStop(.5, '#e2a33a'); g.addColorStop(1, '#7a4a0c');
+  c.fillStyle = g; c.beginPath(); c.moveTo(x - w / 2, y); c.quadraticCurveTo(x, y + h * 1.9, x + w / 2, y); c.closePath(); c.fill();
+  c.fillStyle = '#3a2206'; c.strokeStyle = 'rgba(255,233,168,.6)'; c.lineWidth = Math.max(1, w / 90);
+  c.beginPath(); c.ellipse(x, y, w / 2, h * .22, 0, 0, 7); c.fill(); c.stroke();
+  c.restore();
+}
+function blob(x, y, r, col, a) {
+  const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, col.replace('A', a)); g.addColorStop(1, col.replace('A', 0));
+  ctx.fillStyle = g; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+}
+
+// ---------- fireworks ----------
+const parts = [], shells = [];
+const fwQueue = DATA.fw.map(f => ({ ...f, launched: false, done: false }));
+const G = 260;
+function explode(f) {
+  const [c1, c2] = PAL[Math.floor(rnd() * PAL.length)];
+  const s = f.size, n = Math.round((f.kind === 'pulse' ? 260 : f.kind === 'ring' ? 110 : 190) * Math.min(1.3, s));
+  // flash core
+  parts.push({ x: f.x, y: f.y, vx: 0, vy: 0, life: .35, age: 0, flash: 140 * s, col: '#fff' });
+  if (f.kind === 'pulse') {
+    // particles fly out into the BPMroute heartbeat line, then fall as gold rain
+    const pts = [[-1, 0], [-.55, 0], [-.4, -.55], [-.2, .7], [-.02, -.45], [.12, 0], [.55, 0]];
+    const seg = []; for (let i = 0; i < pts.length - 1; i++) seg.push([pts[i], pts[i + 1]]);
+    for (let i = 0; i < n; i++) {
+      const k = i / n * seg.length, si = Math.floor(k), fr = k - si, [p, q] = seg[si];
+      const tx = (lerp(p[0], q[0], fr)) * 420, ty = lerp(p[1], q[1], fr) * 300;
+      parts.push({ x: f.x, y: f.y, ox: f.x, oy: f.y, tx, ty, shape: true, vx: 0, vy: 0, life: 2.6 + rnd() * .5, age: 0, col: i % 3 ? '#ffe9a8' : (tx < 0 ? '#5ee7ff' : '#ff5ecf'), w: 3.5, glit: true });
+    }
+    // arrow head
+    for (let i = 0; i < 40; i++) {
+      const side = i < 20 ? -1 : 1, k = (i % 20) / 19;
+      parts.push({ x: f.x, y: f.y, ox: f.x, oy: f.y, tx: (.55 - k * .22) * 420 + 0, ty: side * k * .3 * 300 * .75, shape: true, vx: 0, vy: 0, life: 2.8, age: 0, col: '#ff5ecf', w: 3.5, glit: true });
+    }
+    return;
+  }
+  for (let i = 0; i < n; i++) {
+    const a = rnd() * Math.PI * 2;
+    let sp = f.kind === 'ring' ? 430 : (f.kind === 'willow' ? 330 : 470) * (.35 + .65 * Math.sqrt(rnd()));
+    sp *= s;
+    parts.push({
+      x: f.x, y: f.y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * (f.kind === 'ring' ? .85 : 1),
+      life: f.kind === 'willow' ? 2.6 + rnd() * .8 : 1.5 + rnd() * .6, age: 0,
+      drag: f.kind === 'willow' ? 2.0 : 1.55, g: f.kind === 'willow' ? .55 : 1,
+      col: f.kind === 'willow' ? (rnd() < .8 ? '#ffd36e' : '#fff3c4') : (rnd() < .65 ? c1 : c2),
+      w: f.kind === 'willow' ? 2.2 : 3.2, glit: f.kind === 'willow' || f.kind === 'crossette',
+      split: f.kind === 'crossette' && i % 12 === 0 ? .55 : 0,
+    });
+  }
+}
+function stepFireworks(t) {
+  for (const f of fwQueue) {
+    if (!f.launched && t >= f.t - .85) {
+      f.launched = true;
+      if (f.kind !== 'pulse' && f.t > 6.05) shells.push({ f, x0: f.x + (rnd() - .5) * 160, y0: H + 40 });
+    }
+    if (!f.done && t >= f.t) { f.done = true; explode(f); }
+  }
+  for (let i = shells.length - 1; i >= 0; i--) {
+    const s = shells[i], k = clamp((t - (s.f.t - .85)) / .85);
+    if (k >= 1) { shells.splice(i, 1); continue; }
+    const e = 1 - Math.pow(1 - k, 2);
+    const nx = lerp(s.x0, s.f.x, e), ny = lerp(s.y0, s.f.y, e);
+    s.px = s.x ?? nx; s.py = s.y ?? ny; s.x = nx; s.y = ny;
+    parts.push({ x: nx, y: ny, vx: (rnd() - .5) * 40, vy: 60 + rnd() * 50, life: .45, age: 0, drag: 2, g: .4, col: '#ffcf8a', w: 2 });
+  }
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const p = parts[i]; p.age += DT;
+    if (p.age > p.life) {
+      if (p.split) for (let j = 0; j < 8; j++) { const a = j / 8 * 6.283; parts.push({ x: p.x, y: p.y, vx: Math.cos(a) * 170, vy: Math.sin(a) * 170, life: .7, age: 0, drag: 2, g: .8, col: '#fff3c4', w: 2.2, glit: true }); }
+      parts.splice(i, 1); continue;
+    }
+    p.px = p.x; p.py = p.y;
+    if (p.shape) {
+      const k = clamp(p.age / .55), e = 1 - Math.pow(1 - k, 4);
+      const fall = Math.max(0, p.age - 1.3);
+      p.x = p.ox + p.tx * e; p.y = p.oy + p.ty * e + 60 * fall * fall + 18 * fall;
+    } else {
+      const dr = Math.exp(-(p.drag || 1.5) * DT);
+      p.vx *= dr; p.vy = p.vy * dr + G * (p.g ?? 1) * DT;
+      p.x += p.vx * DT; p.y += p.vy * DT;
+    }
+  }
+}
+function drawFireworks(t) {
+  // trails: fade the persistent fx buffer, then add this frame
+  fctx.globalCompositeOperation = 'destination-out';
+  fctx.fillStyle = 'rgba(0,0,0,.28)'; fctx.fillRect(0, 0, W, H);
+  fctx.globalCompositeOperation = 'lighter'; fctx.lineCap = 'round';
+  for (const s of shells) if (s.px != null) {
+    fctx.strokeStyle = '#ffe2b0'; fctx.lineWidth = 4; fctx.beginPath(); fctx.moveTo(s.px, s.py); fctx.lineTo(s.x, s.y); fctx.stroke();
+  }
+  for (const p of parts) {
+    const k = p.age / p.life;
+    if (p.flash) {
+      const r = p.flash * (0.6 + k), g = fctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+      g.addColorStop(0, `rgba(255,248,230,${(1 - k) * .9})`); g.addColorStop(1, 'rgba(255,180,90,0)');
+      fctx.fillStyle = g; fctx.fillRect(p.x - r, p.y - r, 2 * r, 2 * r); continue;
+    }
+    let a = k < .7 ? 1 : 1 - (k - .7) / .3;
+    if (p.glit && k > .45) a *= (Math.sin(p.age * 60 + p.x) > -.2 ? 1 : .15);
+    fctx.globalAlpha = a; fctx.strokeStyle = p.col; fctx.lineWidth = p.w * (1 - k * .5);
+    fctx.beginPath(); fctx.moveTo(p.px ?? p.x, p.py ?? p.y); fctx.lineTo(p.x + .01, p.y); fctx.stroke();
+  }
+  fctx.globalAlpha = 1; fctx.globalCompositeOperation = 'source-over';
+  // glow pass at quarter resolution
+  gctx.clearRect(0, 0, gl.width, gl.height); gctx.filter = 'blur(6px)';
+  gctx.drawImage(fx, 0, 0, gl.width, gl.height); gctx.filter = 'none';
+  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalAlpha = .9; ctx.drawImage(gl, 0, 0, W, H); ctx.drawImage(gl, 0, 0, W, H);
+  ctx.globalAlpha = 1; ctx.drawImage(fx, 0, 0);
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+// ---------- intro: pulse line, diya, ring ----------
+const CX = 540, CY = 960;
+const PULSE = [[-30, 960], [150, 960], [215, 880], [290, 1060], [365, 900], [420, 960], [CX - 34, 960]];
+function polyAt(pts, k) {
+  const lens = []; let tot = 0;
+  for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]); lens.push(l); tot += l; }
+  let d = k * tot; const out = [pts[0]];
+  for (let i = 0; i < lens.length; i++) {
+    if (d >= lens[i]) { out.push(pts[i + 1]); d -= lens[i]; continue; }
+    const f = d / lens[i]; out.push([lerp(pts[i][0], pts[i + 1][0], f), lerp(pts[i][1], pts[i + 1][1], f)]); break;
+  }
+  return out;
+}
+function drawPulse(t, f) {
+  const k = eInOut(prog(t, .25, 1.95)), fade = 1 - prog(t, 2.0, 2.35);
+  if (fade <= 0 || k <= 0) return;
+  for (const mir of [1, -1]) {
+    const pts = polyAt(PULSE, k).map(([x, y]) => [mir > 0 ? x : W - x, y]);
+    const grad = ctx.createLinearGradient(0, 0, W, 0);
+    grad.addColorStop(0, '#5ee7ff'); grad.addColorStop(.5, '#9b7bff'); grad.addColorStop(1, '#ff5ecf');
+    ctx.save(); ctx.globalAlpha = fade; ctx.lineCap = ctx.lineJoin = 'round';
+    ctx.shadowColor = mir > 0 ? '#5ee7ff' : '#ff5ecf'; ctx.shadowBlur = 30;
+    ctx.strokeStyle = grad; ctx.lineWidth = 9;
+    ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke();
+    ctx.restore();
+    const [hx, hy] = pts[pts.length - 1];
+    if (t < 2.0) {
+      blob(hx, hy, 70, 'rgba(255,240,200,A)', .9 * fade);
+      sparkle(ctx, hx, hy, 26, fade, '#fff');
+      if (f % 1 === 0) for (let i = 0; i < 3; i++) parts.push({ x: hx, y: hy, vx: (rnd() - .5) * 260 - mir * 80, vy: (rnd() - .9) * 220, life: .5 + rnd() * .3, age: 0, drag: 2.5, g: .8, col: mir > 0 ? '#a8f3ff' : '#ff8fe0', w: 2.2 });
+    }
+  }
+}
+function drawIntroScene(t, f) {
+  const vis = 1 - prog(t, 5.95, 6.05);
+  if (vis <= 0) return;
+  // zoom into the flame before the drop
+  const z = 1 + 9 * eExpIn(prog(t, 4.6, 6.0)), fy = CY - 60;
+  ctx.save(); ctx.translate(CX, fy); ctx.scale(z, z); ctx.translate(-CX, -fy);
+  const ig = spring(prog(t, 1.95, 2.9));
+  // shockwave
+  const sw = prog(t, 2.0, 2.9);
+  if (sw > 0 && sw < 1) { ctx.strokeStyle = `rgba(255,211,110,${(1 - sw) * .8})`; ctx.lineWidth = 6 * (1 - sw) + 1; ctx.beginPath(); ctx.arc(CX, CY - 60, 40 + sw * 700, 0, 7); ctx.stroke(); }
+  // lotus petals draw in and rotate
+  const pet = eOut(prog(t, 2.2, 3.6)), rot = t * .12;
+  if (pet > 0) {
+    ctx.save(); ctx.translate(CX, CY - 60); ctx.rotate(rot);
+    for (let i = 0; i < 12; i++) {
+      ctx.save(); ctx.rotate(i / 12 * 6.283);
+      ctx.beginPath(); ctx.moveTo(0, -150); ctx.quadraticCurveTo(70, -270, 0, -390); ctx.quadraticCurveTo(-70, -270, 0, -150);
+      ctx.strokeStyle = `rgba(255,190,110,${.45 * pet})`; ctx.lineWidth = 2.5; ctx.setLineDash([800 * pet, 800]); ctx.stroke();
+      ctx.fillStyle = `rgba(120,50,40,${.18 * pet})`; ctx.fill();
+      ctx.restore();
+    }
+    ctx.setLineDash([]); ctx.restore();
+  }
+  // radial EQ bars driven by the soundtrack
+  const eq = eOut(prog(t, 2.1, 3.0));
+  if (eq > 0) {
+    ctx.save(); ctx.translate(CX, CY - 60); ctx.lineCap = 'round'; ctx.lineWidth = 8;
+    const nb = 72;
+    for (let i = 0; i < nb; i++) {
+      const a = i / nb * 6.283 - Math.PI / 2 + rot * .5;
+      const band = Math.floor((i < nb / 2 ? i : nb - i) / (nb / 2) * 40) + 2;
+      const v = lvl(f, band), len = (20 + 150 * v) * eq;
+      const r0 = 230;
+      ctx.strokeStyle = PAL[i % 4][1]; ctx.globalAlpha = .55 + .45 * v;
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); ctx.lineTo(Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len)); ctx.stroke();
+    }
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+  // ring of diyas, one per pluck
+  for (let i = 0; i < 8; i++) {
+    const a = i / 8 * 6.283 - Math.PI / 2 + Math.PI / 8, r = 420;
+    const x = CX + Math.cos(a) * r, y = CY - 60 + Math.sin(a) * r * .98 + 30;
+    const on = prog(t, 2.5 + .25 * i, 2.5 + .25 * i + .5), app = eOut(prog(t, 2.2, 2.8));
+    if (app <= 0) continue;
+    diya(ctx, x, y, 92, app);
+    if (on > 0) { flame(ctx, x, y - 2, 64 * spring(on), t + i, 1); if (on < 1) sparkle(ctx, x, y - 50, 40 * (1 - on), 1 - on, '#fff'); }
+  }
+  // the central diya
+  const ca = eOut(prog(t, 1.6, 2.1));
+  if (ca > 0) {
+    diya(ctx, CX, CY, 230, ca);
+    flame(ctx, CX, CY - 4, 170 * ig * (1 + .25 * (DATA.low[f] || 0)), t);
+  }
+  ctx.restore();
+}
+
+// ---------- background ----------
+function drawBackground(t, f) {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+  const kick = DATA.low[f] || 0, drop = prog(t, 6, 6.3), on = prog(t, 1.8, 3);
+  blob(180 + 60 * Math.sin(t * .4), 1500 + 80 * Math.cos(t * .3), 700, 'rgba(155,60,200,A)', .22 * on + .12 * drop * kick);
+  blob(950 + 50 * Math.cos(t * .5), 500 + 90 * Math.sin(t * .35), 650, 'rgba(255,94,207,A)', .12 * on + .1 * drop * kick);
+  blob(540, 960 + 60 * Math.sin(t * .6), 760, 'rgba(255,170,60,A)', .18 * on + .08 * kick);
+  blob(900, 1650, 520, 'rgba(94,231,255,A)', .07 * drop);
+  for (const s of stars) {
+    const a = (.25 + .75 * Math.abs(Math.sin(t * s.s + s.p))) * (.25 + .75 * on);
+    if (s.sp) sparkle(ctx, s.x, s.y, s.r * 5, a * .8);
+    else { ctx.globalAlpha = a * .7; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 7); ctx.fill(); }
+  }
+  ctx.globalAlpha = 1;
+}
+function drawLanterns(t) {
+  for (const l of lanterns) {
+    const age = t - l.t0; if (age < 0) continue;
+    const y = H + 80 - age * l.sp, x = l.x + 26 * Math.sin(age * .9 + l.ph);
+    if (y < -150) continue;
+    let s = l.s, a = .8 * Math.min(1, age * 1.5) * (y < 300 ? Math.max(0, y + 150) / 450 : 1);
+    // keep the outro and wish text readable: lanterns dim while they pass behind it
+    const band = t > 11 ? 1 - .75 * clamp(1 - Math.abs(y - (t > 14 ? 1130 : 1480)) / 220) : 1;
+    a *= band;
+    blob(x, y, 110 * s, 'rgba(255,160,60,A)', .35 * a);
+    ctx.save(); ctx.globalAlpha = a * .95; ctx.translate(x, y); ctx.rotate(.06 * Math.sin(age * 1.3 + l.ph));
+    const g = ctx.createLinearGradient(0, -50 * s, 0, 45 * s);
+    g.addColorStop(0, '#ff9f43'); g.addColorStop(.6, '#ffd36e'); g.addColorStop(1, '#fff3c4');
+    ctx.fillStyle = g; ctx.beginPath();
+    ctx.moveTo(-26 * s, -50 * s); ctx.lineTo(26 * s, -50 * s); ctx.quadraticCurveTo(36 * s, 10 * s, 20 * s, 45 * s); ctx.lineTo(-20 * s, 45 * s); ctx.quadraticCurveTo(-36 * s, 10 * s, -26 * s, -50 * s); ctx.fill();
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ---------- album art (mini canvas inside the glass card) ----------
+function drawArt(t, f) {
+  const c = actx, s = 420;
+  c.fillStyle = '#07050a'; c.fillRect(0, 0, s, s);
+  c.save(); c.translate(s / 2, s / 2 + 20); c.rotate(t * .4); c.lineCap = 'round'; c.lineWidth = 7;
+  for (let i = 0; i < 40; i++) {
+    const a = i / 40 * 6.283, v = lvl(f, 4 + i % 36);
+    c.strokeStyle = PAL[i % 4][1]; c.globalAlpha = .6 + .4 * v;
+    c.beginPath(); c.moveTo(Math.cos(a) * 70, Math.sin(a) * 70); c.lineTo(Math.cos(a) * (95 + 80 * v), Math.sin(a) * (95 + 80 * v)); c.stroke();
+  }
+  c.restore(); c.globalAlpha = 1;
+  diya(c, s / 2, s / 2 + 70, 120); flame(c, s / 2, s / 2 + 68, 95, t);
+}
+
+// ---------- UI layer ----------
+const css = (el, o) => { for (const k in o) el.style[k] = o[k]; };
+function charIn(chars, t, t0, stag, opt = {}) {
+  chars.forEach((c, i) => {
+    const k = prog(t, t0 + i * stag, t0 + i * stag + (opt.dur || .9));
+    const sp = spring(k * 1.6, 3.2, 6), e = eOut(clamp(k * 2.2));
+    const y = (1 - sp) * (opt.dy ?? 180), sc = lerp(opt.s0 ?? 2.2, 1, sp), rz = (1 - sp) * (opt.rot ?? (i % 2 ? 14 : -14));
+    css(c, { transform: `translateY(${y}px) scale(${sc}) rotate(${rz}deg)`, opacity: e, filter: `blur(${(1 - e) * 24}px)` });
+  });
+}
+function drawUI(t, f) {
+  const kick = DATA.low[f] || 0;
+  // intro label
+  css($('presents'), { opacity: prog(t, .3, .9) * (1 - prog(t, 1.6, 2.0)), letterSpacing: `${8 + 10 * prog(t, .3, 2)}px` });
+  // build words, slammed on each beat
+  BUILD.forEach(([w, a, b], i) => {
+    const el = $('bw' + i), k = prog(t, a, a + .22), out = prog(t, b - .08, b);
+    const last = i === 4;
+    const sc = last ? lerp(1.6, 1, eOut(k)) * (1 + .5 * eExpIn(prog(t, 5.0, 6.0))) : lerp(1.7, 1, eOut(k)) * (1 - .1 * out);
+    css(el, {
+      opacity: k * (1 - out), transform: `scale(${sc})`, filter: `blur(${(1 - k) * 18 + out * 10}px)`,
+      fontSize: last ? '112px' : '150px', letterSpacing: last ? `${-4 + 30 * eIn(prog(t, 4.8, 6))}px` : '-5px'
+    });
+  });
+  // flash on the drop
+  css($('flash'), { opacity: prog(t, 5.75, 6.0) * (1 - prog(t, 6.0, 6.55)) });
+  // title
+  const titleOut = prog(t, 13.85, 14.25), move = eInOut(prog(t, 9.9, 10.7));
+  css($('title'), { transform: `translateY(${-370 * move}px) scale(${lerp(1, .58, move) * (1 + .5 * titleOut)})`, opacity: 1 - titleOut, filter: `blur(${titleOut * 20}px)` });
+  charIn(happyCh, t, 6.0, .07);
+  charIn(diwaliCh, t, 6.45, .065, { dy: -200 });
+    const hk = eOut(prog(t, 7.0, 7.8));
+  css($('t-hindi'), { opacity: hk, clipPath: `inset(0 ${100 - hk * 100}% 0 0)`, transform: `scale(${1 + .04 * kick * prog(t, 6, 7)})` });
+  css($('t-sub'), { opacity: prog(t, 7.6, 8.2) * (1 - prog(t, 9.7, 10)), transform: `translateY(${30 * (1 - eOut(prog(t, 7.6, 8.4)))}px)` });
+  // glass card
+  const ck = spring(prog(t, 10.2, 11.6) * 1.4, 2.2, 5.5), cOut = prog(t, 13.8, 14.2);
+  css($('card'), { transform: `translateY(${(1 - ck) * 1100 - 60 * eIn(cOut)}px) scale(${1 + .2 * eIn(cOut)}) rotate(${(1 - ck) * 6}deg)`, opacity: (t > 10.15 ? 1 : 0) * (1 - cOut), filter: `blur(${cOut * 18}px)` });
+  if (t > 10 && t < 14.3) {
+    drawArt(t, f);
+    waveBars.forEach((b, i) => {
+      const v = lvl(f, 3 + Math.floor(i / 46 * 44)), played = i / 46 < prog(t, 10.6, 13.8);
+      b.style.height = `${12 + 84 * Math.min(1, v)}px`; b.style.opacity = played ? 1 : .35;
+    });
+    const p = prog(t, 10.6, 13.8);
+    $('bar').children[0].style.width = `${p * 100}%`; $('bar').children[1].style.left = `${p * 100}%`;
+    const secs = Math.floor(p * 33 + 108); $('tcur').textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`;
+    $('sheen').style.left = `${-300 + 1600 * prog(t, 11.0, 12.2)}px`;
+  }
+  const wk = eOut(prog(t, 11.2, 11.9));
+  css($('wish'), { opacity: wk * (1 - cOut), transform: `translateY(${40 * (1 - wk)}px)`, filter: `blur(${(1 - wk) * 12 + cOut * 12}px)` });
+  // header + footer
+  const hdr = eOut(prog(t, 6.3, 7.0)) * (1 - prog(t, 13.9, 14.3));
+  css($('header'), { opacity: hdr, transform: `translateY(${-40 * (1 - hdr)}px)` });
+  const ft = eOut(prog(t, 6.3, 7.0));
+  css($('footer'), { opacity: ft, transform: `translateY(${40 * (1 - ft)}px)` });
+  // outro
+  const lk = spring(prog(t, 14.35, 15.6) * 1.3, 2.4, 5);
+  css($('logo'), { opacity: clamp(lk * 3), transform: `scale(${lk * (1 + .03 * Math.sin(t * 3))}) rotate(${(1 - lk) * -40}deg)`, filter: `drop-shadow(0 0 ${40 + 40 * kick}px rgba(155,123,255,.55))` });
+  charIn(brandCh, t, 14.8, .045, { dy: 120, s0: 1.6, rot: 0, dur: .8 });
+  const hdk = eOut(prog(t, 15.3, 16.0));
+  css($('hd'), { opacity: hdk, transform: `translateY(${40 * (1 - hdk)}px)`, filter: `blur(${(1 - hdk) * 14}px)`, backgroundPosition: `${(t * 30) % 200}% 0` });
+  const sk = eOut(prog(t, 15.8, 16.4));
+  css($('svc'), { opacity: sk, transform: `translateY(${30 * (1 - sk)}px)` });
+  const ctk = spring(prog(t, 16.3, 17.4) * 1.3, 2.4, 5);
+  css($('cta'), { opacity: clamp(ctk * 2), transform: `translateX(-50%) scale(${lerp(.6, 1, ctk)})` });
+  css($('fade'), { opacity: prog(t, 19.35, 20) });
+}
+
+// ---------- frame ----------
+let lastF = -1;
+window.renderFrame = function (f) {
+  for (let k = lastF + 1; k <= f; k++) stepFireworks(k * DT);
+  lastF = f;
+  const t = f * DT;
+  drawBackground(t, f);
+  if (t > 6.9) drawLanterns(t);
+  drawPulse(t, f);
+  drawIntroScene(t, f);
+  drawFireworks(t);
+  drawUI(t, f);
+};
+window.ready = document.fonts.ready.then(() => true);
+</script>
+</body></html>
