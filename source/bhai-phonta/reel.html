@@ -1,0 +1,551 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Shubho Bhai Phonta reel</title>
+<link rel="stylesheet" href="fonts/g.css">
+<script src="data.js"></script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#000;width:1080px;height:1920px;overflow:hidden}
+body{font-family:-apple-system,"SF Pro Display","Helvetica Neue",Inter,"Noto Sans Bengali",Arial,sans-serif;color:#f5f5f7;position:relative}
+canvas#gl{position:absolute;inset:0;width:1080px;height:1920px}
+.layer{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute;will-change:transform,opacity}
+.bn{font-family:"Noto Sans Bengali",sans-serif}
+.atma{font-family:"Atma",cursive}
+.mk{width:100%;height:100%}
+#header{left:80px;right:80px;top:150px;display:flex;align-items:center;gap:22px}
+#header .tile{width:76px;height:76px}
+#header span{font-size:40px;font-weight:700;letter-spacing:-1px}
+.pill{margin-left:auto;font-size:30px;font-weight:700;padding:10px 26px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,211,110,.35);color:#ffd36e;backdrop-filter:blur(20px)}
+#footer{left:80px;right:80px;top:1690px;display:flex;justify-content:space-between;font-size:26px;color:rgba(245,245,247,.6)}
+#footer b{color:#f5f5f7;font-weight:600}
+.center{left:0;right:0;text-align:center}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.035));border:1.5px solid rgba(255,255,255,.24);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.08),0 30px 80px rgba(0,0,0,.55)}
+.cap{left:90px;right:90px;top:1420px;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03)),rgba(10,8,8,.45);border-radius:44px;padding:26px 36px 24px;text-align:center;overflow:hidden}
+.cap .l1{font-family:"Atma",cursive;font-size:58px;font-weight:700;color:#fff3d6;line-height:1.25;text-shadow:0 0 30px rgba(255,170,60,.45)}
+.cap .l2{font-size:27px;color:rgba(245,245,247,.62);margin-top:6px;letter-spacing:.2px}
+.cap .eq{display:flex;gap:5px;justify-content:center;height:26px;align-items:center;margin-top:12px}
+.cap .eq i{width:6px;border-radius:4px;background:linear-gradient(180deg,#ffe9a8,#ff5ecf)}
+#t-en{top:1260px;font-size:56px;font-weight:800;letter-spacing:-1.5px}
+.grad{background:linear-gradient(90deg,#ffe9a8,#ffb547 40%,#ff5ecf 75%,#9b7bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#t-sub{top:1345px;font-size:34px;color:rgba(245,245,247,.72)}
+#brand{top:1080px;font-size:132px;font-weight:800;letter-spacing:-5px}
+#hd{top:1245px;font-size:60px;font-weight:700;color:#ffd36e}
+#svc{top:1345px;font-size:32px;color:rgba(245,245,247,.7)}
+#cta{left:50%;top:1440px;font-size:36px;font-weight:600;padding:22px 46px;border-radius:999px;white-space:nowrap}
+#cta b{color:#ffd36e}
+#presents{top:640px;font-size:26px;letter-spacing:14px;font-weight:600;color:rgba(245,245,247,.7)}
+#flash{background:radial-gradient(circle at 50% 45%,#fff,#fff3d6 35%,#ffcf7a 70%,#ff8fe0)}
+#fade{background:#000}
+.ch{display:inline-block}
+</style></head>
+<body>
+<canvas id="gl" width="1080" height="1920"></canvas>
+<div class="layer" id="ui">
+  <div class="abs center" id="presents">BPMROUTE PRESENTS</div>
+  <div id="caps"></div>
+  <div class="abs center grad" id="t-en">Happy Bhai Phonta</div>
+  <div class="abs center" id="t-sub">To every brother and sister, on repeat for life.</div>
+
+  <div class="abs center" id="brand">BPMroute</div>
+  <div class="abs center bn atma" id="hd">শুভ ভাইফোঁটা · Bhai Phonta 2026</div>
+  <div class="abs center" id="svc">Distribution · AI Mastering · Production</div>
+  <div class="abs glass" id="cta">Free to start · <b>bpmroute.com</b></div>
+
+  <div class="abs" id="header"><div class="tile"></div><span>BPMroute</span><div class="pill atma">ভাইফোঁটা</div></div>
+  <div class="abs" id="footer"><b>bpmroute.com</b><span>by EKSTAC33 Production</span></div>
+  <div class="abs layer" id="flash"></div>
+  <div class="abs layer" id="fade"></div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const MARK = `MARK_SVG`;
+const W = 1080, H = 1920, FPS = DATA.fps;
+const C = DATA.cues;                       // timeline from mix.py (seconds)
+const $ = id => document.getElementById(id);
+
+// ---------- helpers ----------
+let seed = 20261111;
+const rnd = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = k => 1 - Math.pow(1 - k, 3);
+const eIn = k => k * k * k;
+const eInOut = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const spring = (k, f = 3.2, d = 5) => k <= 0 ? 0 : k >= 3 ? 1 : 1 - Math.exp(-d * k) * Math.cos(f * Math.PI * k);
+const fi = t => Math.min(DATA.rms.length - 1, Math.max(0, Math.round(t * FPS)));
+const band = (t, b) => (DATA.bands[fi(t)] || [])[b] || 0;
+const low = t => DATA.low[fi(t)] || 0;
+const vo = t => DATA.vo[fi(t)] || 0;
+const noise = (t, s = 1) => Math.sin(t * 7.1 * s) * .5 + Math.sin(t * 13.7 * s + 1.3) * .3 + Math.sin(t * 23.3 * s + 2.1) * .2;
+
+// ---------- renderer ----------
+const renderer = new THREE.WebGLRenderer({ canvas: $('gl'), antialias: true, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = false;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envTex = pmrem.fromScene(new RoomEnvironment(), 0.03).texture;
+scene.environment = envTex;
+scene.environmentIntensity = 0.55;
+const camera = new THREE.PerspectiveCamera(40, W / H, 0.05, 200);
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 0.55, 0.5, 1.05);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+// lights
+const amb = new THREE.AmbientLight(0xffe2c0, 0.06); scene.add(amb);
+const key = new THREE.DirectionalLight(0xffd7a0, 1.1); key.position.set(3, 6, 4); scene.add(key);
+const rim = new THREE.DirectionalLight(0x9b7bff, 1.4); rim.position.set(-4, 3, -5); scene.add(rim);
+const rim2 = new THREE.DirectionalLight(0x5ee7ff, 0.6); rim2.position.set(5, 1, -4); scene.add(rim2);
+
+// ---------- canvas textures ----------
+function canvasTex(w, h, draw, srgb = true) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const glowTex = canvasTex(128, 128, (g, w) => {
+  const r = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.25, 'rgba(255,255,255,.55)'); r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = r; g.fillRect(0, 0, w, w);
+});
+const flameTex = canvasTex(128, 256, (g, w, h) => {
+  // teardrop flame: white core, golden body, orange edge
+  g.translate(w / 2, h * .78);
+  for (let k = 0; k < 40; k++) {
+    const s = 1 - k / 40;
+    g.beginPath(); g.moveTo(0, -h * .72 * s);
+    g.bezierCurveTo(w * .38 * s, -h * .3 * s, w * .42 * s, h * .14 * s, 0, h * .18 * s);
+    g.bezierCurveTo(-w * .42 * s, h * .14 * s, -w * .38 * s, -h * .3 * s, 0, -h * .72 * s);
+    const c = s > .6 ? [255, 120 + 100 * (1 - s), 30] : s > .3 ? [255, 200, 90 + 200 * (.6 - s)] : [255, 250, 235];
+    g.fillStyle = `rgba(${c[0]},${c[1] | 0},${c[2] | 0},${.08 + .05 * (1 - s)})`; g.fill();
+  }
+});
+// alpana engraved brass plate top
+const plateTex = canvasTex(1024, 1024, (g, w) => {
+  const c = w / 2;
+  const base = g.createRadialGradient(c, c, 0, c, c, c);
+  base.addColorStop(0, '#f2c46a'); base.addColorStop(.7, '#d9a043'); base.addColorStop(1, '#b07a26');
+  g.fillStyle = base; g.fillRect(0, 0, w, w);
+  g.strokeStyle = 'rgba(90,50,10,.55)'; g.lineWidth = 5;
+  for (const r of [.97, .9, .62, .58, .2]) { g.beginPath(); g.arc(c, c, r * c, 0, 7); g.stroke(); }
+  // alpana petals
+  g.lineWidth = 4;
+  for (let i = 0; i < 16; i++) {
+    g.save(); g.translate(c, c); g.rotate(i / 16 * Math.PI * 2);
+    g.beginPath(); g.moveTo(0, -.22 * c); g.bezierCurveTo(.12 * c, -.32 * c, .1 * c, -.5 * c, 0, -.57 * c);
+    g.bezierCurveTo(-.1 * c, -.5 * c, -.12 * c, -.32 * c, 0, -.22 * c); g.stroke();
+    g.beginPath(); g.arc(0, -.75 * c, .045 * c, 0, 7); g.stroke();
+    g.beginPath(); g.moveTo(-.06 * c, -.66 * c); g.quadraticCurveTo(0, -.7 * c, .06 * c, -.66 * c); g.stroke();
+    g.restore();
+  }
+  for (let i = 0; i < 64; i++) { const a = i / 64 * Math.PI * 2; g.beginPath(); g.arc(c + Math.cos(a) * .935 * c, c + Math.sin(a) * .935 * c, 6, 0, 7); g.fillStyle = 'rgba(90,50,10,.5)'; g.fill(); }
+});
+const vinylTex = canvasTex(1024, 1024, (g, w) => {
+  const c = w / 2;
+  g.fillStyle = '#060608'; g.beginPath(); g.arc(c, c, c, 0, 7); g.fill();
+  for (let r = .36; r < .99; r += .006) { g.beginPath(); g.arc(c, c, r * c, 0, 7); g.strokeStyle = `rgba(255,255,255,${.025 + .03 * Math.abs(Math.sin(r * 90))})`; g.lineWidth = 1.2; g.stroke(); }
+  // label
+  const lg = g.createLinearGradient(c - .34 * c, c - .34 * c, c + .34 * c, c + .34 * c);
+  lg.addColorStop(0, '#ffe9a8'); lg.addColorStop(.45, '#ffb547'); lg.addColorStop(.8, '#ff5ecf'); lg.addColorStop(1, '#9b7bff');
+  g.fillStyle = lg; g.beginPath(); g.arc(c, c, .34 * c, 0, 7); g.fill();
+  g.fillStyle = '#1a0d05'; g.textAlign = 'center';
+  g.font = '700 74px Atma'; g.fillText('ভাইফোঁটা', c, c - 40);
+  g.font = '700 30px -apple-system, Helvetica, Arial'; g.fillText('BPMroute · SIDE A', c, c + 70);
+  g.font = '600 22px -apple-system, Helvetica, Arial'; g.fillText('ON REPEAT FOR LIFE', c, c + 108);
+  g.fillStyle = '#000'; g.beginPath(); g.arc(c, c, 14, 0, 7); g.fill();
+  g.beginPath(); g.arc(c, c - .2 * c, 16, 0, 7); g.fillStyle = '#c4161c'; g.fill();   // the phonta dot
+}, true);
+
+// ---------- materials ----------
+const brass = new THREE.MeshStandardMaterial({ color: 0xd8a24a, metalness: 1, roughness: .28, envMapIntensity: 1.2 });
+const brassTop = new THREE.MeshStandardMaterial({ map: plateTex, metalness: 1, roughness: .4, envMapIntensity: .65 });
+const clay = new THREE.MeshStandardMaterial({ color: 0xa4502a, roughness: .75, metalness: 0 });
+const ghee = new THREE.MeshStandardMaterial({ color: 0xffd27a, roughness: .2, metalness: 0, emissive: 0x6a3a00, emissiveIntensity: .3 });
+const chandan = new THREE.MeshStandardMaterial({ color: 0xf6e7c6, roughness: .55 });
+const kumkum = new THREE.MeshStandardMaterial({ color: 0xc4161c, roughness: .6 });
+const sandeshM = new THREE.MeshStandardMaterial({ color: 0xf1dcae, roughness: .65 });
+const grassM = new THREE.MeshStandardMaterial({ color: 0x3f9a3a, roughness: .5 });
+const paddyM = new THREE.MeshStandardMaterial({ color: 0xd8b25a, roughness: .5, metalness: .1 });
+
+// ---------- builders ----------
+function lathe(points, mat, seg = 64) { return new THREE.Mesh(new THREE.LatheGeometry(points.map(p => new THREE.Vector2(p[0], p[1])), seg), mat); }
+function makeFlame(scale = 1) {
+  const g = new THREE.Group();
+  const outer = new THREE.Sprite(new THREE.SpriteMaterial({ map: flameTex, color: 0xffb04a, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, toneMapped: false }));
+  outer.scale.set(.16 * scale, .32 * scale, 1); outer.center.set(.5, .22);
+  const core = new THREE.Sprite(new THREE.SpriteMaterial({ map: flameTex, color: 0xfff3d0, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, toneMapped: false }));
+  core.scale.set(.08 * scale, .16 * scale, 1); core.center.set(.5, .22);
+  const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xff9a2e, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: .35, toneMapped: false }));
+  halo.scale.set(.9 * scale, .9 * scale, 1); halo.position.y = .08 * scale;
+  g.add(halo, outer, core); g.userData = { outer, core, halo, scale };
+  return g;
+}
+function setFlame(f, t, on, phase = 0) {
+  const k = on, s = f.userData.scale, n = 1 + .12 * noise(t + phase, 1.6);
+  f.userData.outer.scale.set(.16 * s * k * (2 - n), .32 * s * k * n, 1);
+  f.userData.core.scale.set(.08 * s * k, .15 * s * k * n, 1);
+  f.userData.halo.scale.setScalar(.9 * s * k * (.9 + .1 * n));
+  f.userData.outer.material.rotation = .05 * noise(t + phase, 2.3);
+  f.visible = k > .001;
+}
+function makeDiya(scale = 1) {
+  const g = new THREE.Group();
+  const body = lathe([[0, 0], [.12, 0], [.2, .03], [.27, .1], [.3, .16], [.28, .17], [.22, .12], [0, .11]], clay);
+  const oil = lathe([[0, .115], [.24, .115], [.25, .12], [0, .12]], ghee);
+  const spout = new THREE.Mesh(new THREE.ConeGeometry(.07, .18, 16), clay); spout.rotation.z = -Math.PI / 2 - .5; spout.position.set(.3, .14, 0);
+  const wick = new THREE.Mesh(new THREE.CylinderGeometry(.012, .018, .07, 8), new THREE.MeshStandardMaterial({ color: 0xfff1d8, roughness: .9 }));
+  wick.position.set(.3, .2, 0); wick.rotation.z = -.5;
+  const flame = makeFlame(1); flame.position.set(.32, .22, 0);
+  g.add(body, oil, spout, wick, flame); g.scale.setScalar(scale); g.userData.flame = flame;
+  return g;
+}
+
+// Thala (brass plate) with offerings
+const R = 1.6;
+const thala = new THREE.Group(); scene.add(thala);
+const plateBody = lathe([[0, -.05], [R * .9, -.05], [R, .02], [R * 1.06, .12], [R * 1.08, .14], [R * 1.05, .145], [R * .97, .06], [R * .9, .02], [0, .02]], brass, 96);
+const plateTop = new THREE.Mesh(new THREE.CircleGeometry(R * .9, 96), brassTop); plateTop.rotation.x = -Math.PI / 2; plateTop.position.y = .021;
+thala.add(plateBody, plateTop);
+const offerings = new THREE.Group(); thala.add(offerings);
+const diya = makeDiya(1.15); diya.position.set(.72, .02, -.3); diya.rotation.y = 2.4; offerings.add(diya);
+const bowlC = new THREE.Group(); bowlC.position.set(-.55, .02, .38); offerings.add(bowlC);
+bowlC.add(lathe([[0, 0], [.14, 0], [.24, .06], [.27, .16], [.25, .165], [.22, .08], [0, .05]], brass));
+const paste = lathe([[0, .1], [.2, .1], [.22, .11], [0, .125]], chandan); bowlC.add(paste);
+const bowlK = new THREE.Group(); bowlK.position.set(-.1, .02, -.78); offerings.add(bowlK);
+bowlK.add(lathe([[0, 0], [.09, 0], [.15, .04], [.17, .1], [.155, .105], [.13, .05], [0, .035]], brass));
+bowlK.add(lathe([[0, .07], [.13, .07], [.14, .08], [0, .095]], kumkum));
+const sweets = [];
+for (const [x, z, r] of [[.3, .9, .18], [.62, .62, .17], [.02, 1.08, .16]]) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 16), sandeshM); m.scale.set(1, .48, 1); m.position.set(x, .02 + r * .45, z); offerings.add(m); sweets.push(m);
+  const top = new THREE.Mesh(new THREE.TorusGeometry(r * .45, r * .08, 8, 24), new THREE.MeshStandardMaterial({ color: 0xc48a3a, roughness: .5 }));
+  top.rotation.x = Math.PI / 2; top.position.set(x, .02 + r * .9, z); offerings.add(top);
+}
+// durva grass bundle
+for (let i = 0; i < 9; i++) {
+  const a = -.4 + i * .1, pts = [];
+  for (let k = 0; k <= 8; k++) { const s = k / 8; pts.push(new THREE.Vector3(-.95 + s * .55 * Math.cos(a), .03 + Math.sin(s * Math.PI) * .12 * (1 + i % 3 * .3), -.25 + s * .55 * Math.sin(a) - .25)); }
+  offerings.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, .012, 5), grassM));
+}
+// paddy grains
+const paddy = new THREE.InstancedMesh(new THREE.SphereGeometry(.035, 8, 6), paddyM, 70);
+{ const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler();
+  for (let i = 0; i < 70; i++) { const a = rnd() * 6.283, r = R * (.35 + rnd() * .5);
+    if (Math.hypot(Math.cos(a) * r - .72, Math.sin(a) * r + .3) < .45 || Math.hypot(Math.cos(a) * r + .55, Math.sin(a) * r - .38) < .38) { i--; continue; }
+    q.setFromEuler(e.set(0, rnd() * 6, rnd() * .3)); m.compose(new THREE.Vector3(Math.cos(a) * r, .035, Math.sin(a) * r), q, new THREE.Vector3(1, .55, 2.1)); paddy.setMatrixAt(i, m); } }
+offerings.add(paddy);
+// marigold heads
+const petalGeo = (() => { const g = new THREE.PlaneGeometry(.12, .2, 2, 3); const p = g.attributes.position; for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i); p.setZ(i, -x * x * 4 - y * .15); } g.computeVertexNormals(); return g; })();
+const petalM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .55, side: THREE.DoubleSide, emissive: 0x3a1500, emissiveIntensity: .4 });
+function marigold(pos, s) {
+  const n = 70, im = new THREE.InstancedMesh(petalGeo, petalM, n), m = new THREE.Matrix4(), q = new THREE.Quaternion(), col = new THREE.Color();
+  for (let i = 0; i < n; i++) { const phi = Math.acos(1 - 2 * (i + .5) / n) * .62, th = i * 2.399;
+    const d = new THREE.Vector3(Math.sin(phi) * Math.cos(th), Math.cos(phi), Math.sin(phi) * Math.sin(th));
+    q.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d); m.compose(d.clone().multiplyScalar(.08 * s), q, new THREE.Vector3(s, s, s)); im.setMatrixAt(i, m);
+    im.setColorAt(i, col.set(i % 3 ? 0xff9d14 : 0xffbf2e)); }
+  im.position.copy(pos); offerings.add(im); return im;
+}
+marigold(new THREE.Vector3(1.05, .05, .35), .9); marigold(new THREE.Vector3(-.95, .05, .85), .8); marigold(new THREE.Vector3(.95, .05, -.95), .75);
+
+// vinyl face that fades in over the plate
+const vinylMat = new THREE.MeshStandardMaterial({ map: vinylTex, roughness: .5, metalness: 0, envMapIntensity: .12, color: 0x8a8a8a, transparent: true, opacity: 0 });
+const vinyl = new THREE.Mesh(new THREE.CircleGeometry(R * .97, 128), vinylMat); vinyl.rotation.x = -Math.PI / 2; vinyl.position.y = .03; thala.add(vinyl);
+// tonearm
+const tonearm = new THREE.Group(); scene.add(tonearm);
+{ const base = new THREE.Mesh(new THREE.CylinderGeometry(.16, .2, .18, 32), brass); tonearm.add(base);
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, 1.9, 16), new THREE.MeshStandardMaterial({ color: 0xe8e8ee, metalness: 1, roughness: .2 })); arm.rotation.z = Math.PI / 2; arm.position.set(-.95, .14, 0); tonearm.add(arm);
+  const head = new THREE.Mesh(new THREE.BoxGeometry(.24, .07, .14), brass); head.position.set(-1.95, .1, 0); tonearm.add(head); }
+
+// phonta drop (sandal paste with red dot)
+const drop = new THREE.Group(); scene.add(drop);
+{ const d = new THREE.Mesh(new THREE.SphereGeometry(.16, 48, 32), new THREE.MeshPhysicalMaterial({ color: 0xfff1d6, roughness: .25, clearcoat: 1, emissive: 0x6b4a1a, emissiveIntensity: .5 }));
+  d.scale.set(1, 1.25, 1); drop.add(d);
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(.05, 24, 16), new THREE.MeshStandardMaterial({ color: 0xd0121a, emissive: 0x700005, emissiveIntensity: .8 })); dot.position.set(0, .04, .14); dot.scale.z = .5; drop.add(dot);
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xffd9a0, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: .35, toneMapped: false })); glow.scale.setScalar(.8); drop.add(glow); }
+
+// diya ring for the drop
+const diyaRing = new THREE.Group(); scene.add(diyaRing);
+const ringDiyas = Array.from({ length: 8 }, (_, i) => { const d = makeDiya(.9); diyaRing.add(d); return d; });
+
+// EQ ring (instanced bars) in brand gradient
+const NB = 72;
+const eqGeo = new THREE.BoxGeometry(.06, 1, .06); eqGeo.translate(0, .5, 0);
+const eq = new THREE.InstancedMesh(eqGeo, new THREE.MeshBasicMaterial({ toneMapped: false }), NB); scene.add(eq);
+{ const pal = [0xffe9a8, 0xffb547, 0xff5ecf, 0x9b7bff, 0x5ee7ff, 0x9b7bff, 0xff5ecf, 0xffb547], col = new THREE.Color(), a = new THREE.Color(), b = new THREE.Color();
+  for (let i = 0; i < NB; i++) { const k = i / NB * pal.length; a.set(pal[k | 0]); b.set(pal[((k | 0) + 1) % pal.length]); eq.setColorAt(i, col.copy(a).lerp(b, k % 1).multiplyScalar(1.6)); } }
+const eqDummy = new THREE.Object3D();
+
+// ripple rings
+const ripples = [0, 1, 2].map(i => { const m = new THREE.Mesh(new THREE.TorusGeometry(1, .012, 8, 128), new THREE.MeshBasicMaterial({ color: [0xffd9a0, 0xff5ecf, 0x5ee7ff][i], transparent: true, toneMapped: false, blending: THREE.AdditiveBlending, depthWrite: false })); m.rotation.x = Math.PI / 2; scene.add(m); return m; });
+
+// repeat ring (liquid glass torus with arrow)
+const repeat = new THREE.Group(); scene.add(repeat);
+{ const glassM = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: .08, metalness: 0, clearcoat: 1, transparent: true, opacity: .32, iridescence: 1, iridescenceIOR: 1.6, envMapIntensity: 1.2, emissive: 0x9b7bff, emissiveIntensity: .5 });
+  const arc = new THREE.Mesh(new THREE.TorusGeometry(2.05, .06, 24, 160, Math.PI * 1.75), glassM); repeat.add(arc);
+  const head = new THREE.Mesh(new THREE.ConeGeometry(.16, .34, 24), glassM); head.position.set(2.05, 0, 0); head.rotation.x = Math.PI; repeat.add(head);
+  repeat.userData.mat = glassM; }
+
+// floating Bengali 3D words (stacked layers = extrusion)
+function textTex(text, font, size, fill, padX = 40) {
+  const mc = document.createElement('canvas').getContext('2d'); mc.font = `${font}`; const tw = Math.ceil(mc.measureText(text).width) + padX * 2;
+  const th = Math.ceil(size * 1.9);
+  return { tex: canvasTex(tw, th, (g, w, h) => { g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = fill(g, w, h); g.fillText(text, w / 2, h * .54); }), aspect: tw / th };
+}
+function text3D(text, height, faceFill, sideColor, layers = 22, depth = .22) {
+  const font = `700 200px Atma`;
+  const face = textTex(text, font, 200, faceFill), side = textTex(text, font, 200, () => sideColor);
+  const g = new THREE.Group(), geo = new THREE.PlaneGeometry(height * face.aspect, height);
+  for (let i = layers; i >= 0; i--) {
+    const isFace = i === 0, sh = 1 - i / layers;
+    const m = new THREE.MeshBasicMaterial({ map: isFace ? face.tex : side.tex, transparent: true, depthWrite: false, toneMapped: !isFace, color: isFace ? 0xffffff : new THREE.Color().setScalar(.35 + .65 * sh * sh) });
+    const p = new THREE.Mesh(geo, m); p.position.z = -i / layers * depth; g.add(p);
+  }
+  g.userData.mats = g.children.map(c => c.material);
+  return g;
+}
+const goldFill = (g, w, h) => { const l = g.createLinearGradient(0, h * .2, 0, h * .85); l.addColorStop(0, '#fff6d8'); l.addColorStop(.45, '#ffcf6a'); l.addColorStop(1, '#ff8a3c'); return l; };
+const brandFill = (g, w, h) => { const l = g.createLinearGradient(0, 0, w, 0); l.addColorStop(0, '#ffe9a8'); l.addColorStop(.4, '#ffb547'); l.addColorStop(.75, '#ff5ecf'); l.addColorStop(1, '#9b7bff'); return l; };
+const setOpacity = (g, o) => { for (const m of g.userData.mats) m.opacity = o; g.visible = o > .002; };
+
+// ---------- logo tile (extruded squircle + pulse) ----------
+const logo = new THREE.Group(); scene.add(logo);
+{ const s = new THREE.Shape(); const S = v => (v - 60) / 40;
+  s.moveTo(S(60), -S(4)); s.bezierCurveTo(S(100), -S(4), S(116), -S(20), S(116), -S(60)); s.bezierCurveTo(S(116), -S(100), S(100), -S(116), S(60), -S(116));
+  s.bezierCurveTo(S(20), -S(116), S(4), -S(100), S(4), -S(60)); s.bezierCurveTo(S(4), -S(20), S(20), -S(4), S(60), -S(4));
+  const geo = new THREE.ExtrudeGeometry(s, { depth: .32, bevelEnabled: true, bevelThickness: .08, bevelSize: .08, bevelSegments: 10, curveSegments: 48 }); geo.translate(0, 0, -.2);
+  logo.add(new THREE.Mesh(geo, new THREE.MeshPhysicalMaterial({ color: 0x15151b, metalness: .5, roughness: .22, clearcoat: 1, clearcoatRoughness: .08, envMapIntensity: 1.6 })));
+  const P = [[18, 64], [32, 64], [39, 44], [49, 84], [58, 54], [64, 64], [86, 64]].map(([x, y]) => new THREE.Vector3(S(x), -S(y), .26));
+  const curve = new THREE.CurvePath(); for (let i = 0; i < P.length - 1; i++) curve.add(new THREE.LineCurve3(P[i], P[i + 1]));
+  const tube = new THREE.TubeGeometry(curve, 200, .085, 12, false);
+  const cols = [], cA = new THREE.Color(0x5ee7ff), cB = new THREE.Color(0x9b7bff), cC = new THREE.Color(0xff5ecf), tc = new THREE.Color();
+  const pos = tube.attributes.position; for (let i = 0; i < pos.count; i++) { const k = clamp((pos.getX(i) - S(18)) / (S(86) - S(18))); tc.copy(k < .5 ? cA : cB).lerp(k < .5 ? cB : cC, k < .5 ? k * 2 : (k - .5) * 2).multiplyScalar(1.5); cols.push(tc.r, tc.g, tc.b); }
+  tube.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3));
+  const pm = new THREE.MeshBasicMaterial({ vertexColors: true, toneMapped: false }); logo.add(new THREE.Mesh(tube, pm));
+  const ar = new THREE.CurvePath(); const A = [[82, 52], [94, 64], [82, 76]].map(([x, y]) => new THREE.Vector3(S(x), -S(y), .26));
+  ar.add(new THREE.LineCurve3(A[0], A[1])); ar.add(new THREE.LineCurve3(A[1], A[2]));
+  logo.add(new THREE.Mesh(new THREE.TubeGeometry(ar, 40, .085, 12, false), new THREE.MeshBasicMaterial({ color: new THREE.Color(0xff5ecf).multiplyScalar(1.5), toneMapped: false })));
+  for (const p of [...P, A[1]]) { const b = new THREE.Mesh(new THREE.SphereGeometry(.085, 16, 12), pm.clone()); b.material.vertexColors = false; b.material.color.set(p.x < 0 ? 0x7fd9ff : 0xff7fd8).multiplyScalar(1.4); b.position.copy(p); logo.add(b); }
+}
+
+// ---------- petals burst ----------
+const NP = 300;
+const petals = new THREE.InstancedMesh(petalGeo, petalM, NP); petals.frustumCulled = false; scene.add(petals);
+const PD = Array.from({ length: NP }, (_, i) => { const th = rnd() * 6.283, ph = Math.acos(2 * rnd() - 1), sp = 3 + rnd() * 6;
+  return { v: new THREE.Vector3(Math.sin(ph) * Math.cos(th) * sp, Math.abs(Math.cos(ph)) * sp * .9 + 2, Math.sin(ph) * Math.sin(th) * sp * .7), rx: rnd() * 6, ry: rnd() * 6, wr: 2 + rnd() * 5, s: .45 + rnd() * .5,
+    fx: (rnd() - .5) * 12, fz: -4 - rnd() * 6, fd: rnd() * 6, fs: .5 + rnd() * .5 }; });
+{ const col = new THREE.Color(); for (let i = 0; i < NP; i++) petals.setColorAt(i, col.set([0xff9d14, 0xffbf2e, 0xff7a00, 0xd0121a, 0xffe9a8][i % 5])); }
+
+// ---------- bokeh / stars backdrop ----------
+const NBK = 160;
+const bokeh = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: glowTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, opacity: .5 }), NBK);
+bokeh.frustumCulled = false; scene.add(bokeh);
+const BK = Array.from({ length: NBK }, () => ({ p: new THREE.Vector3((rnd() - .5) * 30, (rnd() - .5) * 40 + 3, -8 - rnd() * 20), s: .15 + rnd() * .9, ph: rnd() * 6 }));
+{ const col = new THREE.Color(); for (let i = 0; i < NBK; i++) bokeh.setColorAt(i, col.set([0xffb547, 0xff8a3c, 0xffe9a8, 0xff5ecf, 0x9b7bff][i % 5]).multiplyScalar(.35)); }
+const backGlow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: 0xff7a2a, blending: THREE.AdditiveBlending, depthWrite: false, transparent: true, opacity: .25, toneMapped: false }));
+backGlow.scale.set(16, 16, 1); backGlow.position.set(0, 0, -16); scene.add(backGlow);
+
+// ---------- DOM ----------
+for (const el of document.querySelectorAll('#header .tile')) el.innerHTML = MARK;
+const CAPS = C.caps.map((c, i) => { const d = document.createElement('div'); d.className = 'abs glass cap'; d.innerHTML = `<div class="l1" style="font-size:${[...c.bn].length > 26 ? 48 : 58}px">${c.bn}</div><div class="l2">${c.en}</div><div class="eq">${'<i></i>'.repeat(24)}</div>`; $('caps').appendChild(d); return { el: d, bars: [...d.querySelectorAll('i')], ...c }; });
+
+let words = [], title = [];
+async function init() {
+  await document.fonts.load('700 200px Atma', 'ভাইফোঁটা'); await document.fonts.load('600 40px "Noto Sans Bengali"', 'ভাই'); await document.fonts.ready;
+  // vinyl label uses Atma: redraw now that the font is loaded
+  vinylTex.image.getContext('2d') && (() => { const g = vinylTex.image.getContext('2d'), c = 512; g.save(); g.beginPath(); g.arc(c, c, .34 * c, 0, 7); g.clip();
+    const lg = g.createLinearGradient(c - .34 * c, c - .34 * c, c + .34 * c, c + .34 * c); lg.addColorStop(0, '#ffe9a8'); lg.addColorStop(.45, '#ffb547'); lg.addColorStop(.8, '#ff5ecf'); lg.addColorStop(1, '#9b7bff');
+    g.fillStyle = lg; g.fillRect(0, 0, 1024, 1024); g.fillStyle = '#1a0d05'; g.textAlign = 'center';
+    g.font = '700 74px Atma'; g.fillText('ভাইফোঁটা', c, c - 40); g.font = '700 30px -apple-system, Helvetica, Arial'; g.fillText('BPMroute · SIDE A', c, c + 70);
+    g.font = '600 22px -apple-system, Helvetica, Arial'; g.fillText('ON REPEAT FOR LIFE', c, c + 108); g.fillStyle = '#000'; g.beginPath(); g.arc(c, c, 14, 0, 7); g.fill();
+    g.beginPath(); g.arc(c, c - .2 * c, 16, 0, 7); g.fillStyle = '#c4161c'; g.fill(); g.restore(); vinylTex.needsUpdate = true; })();
+  words = C.words.map((w, i) => { const g = text3D(w.bn, .62, i === 2 ? brandFill : goldFill, ['#6b3a0c', '#6b3a0c', '#4a1550'][i]); scene.add(g); return { g, ...w }; });
+  title = [text3D('শুভ', .95, goldFill, '#6b3a0c', 26, .3), text3D('ভাইফোঁটা', 1.05, brandFill, '#4a1550', 26, .3)];
+  title.forEach(g => scene.add(g));
+}
+
+// ---------- per-frame ----------
+const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+const tmpM = new THREE.Matrix4(), tmpQ = new THREE.Quaternion(), tmpE = new THREE.Euler(), tmpS = new THREE.Vector3(), tmpP = new THREE.Vector3();
+function setCam(pos, look, roll = 0) { camera.position.copy(pos); camera.up.set(Math.sin(roll), Math.cos(roll), 0); camera.lookAt(look); }
+function css(el, o, tf = '') { el.style.opacity = o; el.style.transform = tf; el.style.visibility = o > .002 ? 'visible' : 'hidden'; }
+
+function frame(f) {
+  const t = f / FPS;
+  const { hit: HIT, drop: DROP, outro: OUTRO, morph: MORPH, dur: DUR } = C;
+  const beat = 60 / 96, kickPulse = t > HIT && t < OUTRO ? Math.exp(-((t - HIT) % beat) * 9) : 0;
+  const bass = low(t);
+
+  // --- thala + offerings ---
+  const rise = eOut(prog(t, 0, 1.6));
+  const morphK = eInOut(prog(t, MORPH, MORPH + 1.0));         // plate tilts to face camera & becomes vinyl
+  const exitK = eIn(prog(t, DROP - .4, DROP + .2));
+  thala.visible = t < DROP + .3;
+  thala.position.set(0, lerp(-2.2, 0, rise) + morphK * .9, morphK * -.4);
+  thala.rotation.set(lerp(0, 1.25, morphK), 0, 0);
+  const spin = t * .25 + Math.max(0, t - MORPH) * 2.5 + eIn(prog(t, DROP - 1.5, DROP)) * 6;
+  plateTop.rotation.z = spin; vinyl.rotation.z = spin;
+  offerings.rotation.y = t * .12;
+  const offK = 1 - eIn(prog(t, MORPH - .1, MORPH + .55));
+  offerings.scale.setScalar(Math.max(.001, offK)); offerings.position.y = (1 - offK) * .6; offerings.visible = offK > .002;
+  thala.scale.setScalar(1 - exitK * .9 - morphK * .22);
+  brass.envMapIntensity = lerp(1.2, .5, morphK); brassTop.envMapIntensity = lerp(.65, .25, morphK);
+  vinylMat.opacity = prog(t, MORPH + .35, MORPH + 1.0);
+  const ignite = spring(prog(t, 0.9, 1.9) * 1.6);
+  setFlame(diya.userData.flame, t, clamp(ignite, 0, 1.4));
+  tonearm.visible = t > MORPH && t < DROP + .2;
+  { const k = eOut(prog(t, MORPH + .6, MORPH + 1.4)); tonearm.position.set(2.6 - k * .3, thala.position.y + .9 - k * .1, thala.position.z + .9); tonearm.rotation.set(1.25, 0, lerp(-.6, -.12, k)); tonearm.scale.setScalar(k * .9 * (1 - exitK)); }
+
+  // --- phonta drop: rises from the chandan bowl, then flies into camera ---
+  const dRise = prog(t, C.dropRise, C.dropRise + 1.0), dFly = eIn(prog(t, HIT - .55, HIT));
+  drop.visible = dRise > 0 && t < HIT;
+  const bowlW = bowlC.getWorldPosition(new THREE.Vector3());
+  const hover = v3(bowlW.x * .5, .9 + .1 * Math.sin(t * 3), bowlW.z * .5);
+  const startP = bowlW.clone().add(v3(0, .12, 0));
+  drop.position.copy(startP.lerp(hover, eOut(dRise)));
+  drop.scale.setScalar(eOut(dRise) * (1 + .08 * Math.sin(t * 9)));
+  drop.rotation.y = t * 2;
+
+  // --- camera ---
+  let cp, cl, roll = 0;
+  if (t < HIT) {
+    const k = eInOut(prog(t, 0, HIT - .6)), a = lerp(-.7, 1.0, k), r = lerp(7.4, 5.6, k), h = lerp(6.5, 2.9, eOut(prog(t, 0, 3)));
+    cp = v3(Math.sin(a) * r, h, Math.cos(a) * r); cl = v3(0, .35 + .2 * k, 0);
+    if (dFly > 0) { const target = cp.clone().lerp(cl, .85); drop.position.lerp(target, dFly); }
+  } else if (t < DROP) {
+    const k = prog(t, HIT, DROP), back = eOut(prog(t, HIT, HIT + .9));
+    const a = lerp(1.0, 0.0, eInOut(prog(t, HIT, MORPH + .8)));
+    const r = lerp(3.2, 7.2, back) - eIn(prog(t, DROP - 1.6, DROP)) * 4.5, h = lerp(1.8, 3.0, back) - morphK * 1.3;
+    cp = v3(Math.sin(a) * r, h, Math.cos(a) * r); cl = v3(0, .3 + morphK * 1.0, 0);
+    roll = .04 * Math.sin(t * 1.7) + eIn(prog(t, DROP - 1.2, DROP)) * .35;
+  } else if (t < OUTRO) {
+    const k = prog(t, DROP, OUTRO), punch = 1 - eOut(prog(t, DROP, DROP + .8));
+    cp = v3(Math.sin(t * .5) * .8, .6 + .2 * Math.sin(t * .7), 9.5 - punch * 3 - k * 1.2 - kickPulse * .12); cl = v3(0, .55, 0);
+    roll = .03 * Math.sin(t * 1.3) - punch * .25;
+  } else {
+    const k = eOut(prog(t, OUTRO, OUTRO + 1.5));
+    cp = v3(0, .9, 10 - k * 1.2); cl = v3(0, .9, 0);
+  }
+  setCam(cp, cl, roll);
+
+  // --- ripples at HIT and DROP ---
+  ripples.forEach((m, i) => {
+    const k1 = prog(t, HIT + i * .12, HIT + 1.4 + i * .12), k2 = prog(t, DROP + i * .1, DROP + 1.3 + i * .1);
+    const k = k1 > 0 && k1 < 1 ? k1 : k2;
+    m.visible = k > 0 && k < 1;
+    m.scale.setScalar(.3 + eOut(k) * (k2 > 0 ? 7 : 5));
+    m.material.opacity = (1 - k) * .9;
+    if (k2 > 0) { m.rotation.set(0, 0, 0); m.position.set(0, .55, 0); } else { m.rotation.set(Math.PI / 2, 0, 0); m.position.set(0, .05, 0); }
+  });
+
+  // --- EQ ring: around plate after HIT (flat), as halo behind title at DROP ---
+  const eqOn = clamp(prog(t, HIT, HIT + .6) * (1 - prog(t, MORPH - .3, MORPH + .2)) + prog(t, DROP, DROP + .5) * (1 - prog(t, OUTRO - .3, OUTRO + .2)));
+  eq.visible = eqOn > .01;
+  const halo = t >= DROP;
+  for (let i = 0; i < NB; i++) {
+    const a = i / NB * Math.PI * 2, bi = Math.floor(Math.abs(Math.sin(a / 2)) * 44) + 2;
+    const hgt = (.08 + band(t, bi) * (halo ? 1.1 : .55) + kickPulse * .15) * eqOn;
+    if (!halo) { eqDummy.position.set(Math.cos(a) * 2.05, 0, Math.sin(a) * 2.05); eqDummy.rotation.set(0, 0, 0); }
+    else { const rr = 2.35 + bass * .1; eqDummy.position.set(Math.cos(a) * rr, .55 + Math.sin(a) * rr, -1.2); eqDummy.rotation.set(0, 0, a - Math.PI / 2); }
+    eqDummy.scale.set(1, Math.max(.001, hgt), 1); eqDummy.updateMatrix(); eq.setMatrixAt(i, eqDummy.matrix);
+  }
+  eq.instanceMatrix.needsUpdate = true;
+
+  // --- repeat ring around the vinyl ---
+  { const k = eOut(prog(t, MORPH + .7, MORPH + 1.5)) * (1 - exitK);
+    repeat.visible = k > .01; repeat.position.copy(thala.position).add(v3(0, 0, .1)); repeat.rotation.set(0, 0, -t * 2.2); repeat.scale.setScalar(.45 + .38 * k + .03 * kickPulse); repeat.userData.mat.opacity = .38 * k; }
+
+  // --- flying words ---
+  for (const w of words) {
+    const k = prog(t, w.t, w.t + 1.9), g = w.g;
+    const fwd = camera.getWorldDirection(new THREE.Vector3()), right = new THREE.Vector3().crossVectors(fwd, camera.up).normalize();
+    const dist = lerp(9, 1.2, eIn(k) * .35 + k * .65);
+    g.position.copy(camera.position).addScaledVector(fwd, dist).addScaledVector(right, w.x * (dist / 6)).addScaledVector(camera.up, w.y * (dist / 6) + .3);
+    g.quaternion.copy(camera.quaternion); g.rotateY(w.x * -.25 * (1 - k)); g.rotateZ(w.x * .05);
+    setOpacity(g, clamp(prog(t, w.t, w.t + .25) * (1 - prog(t, w.t + 1.5, w.t + 1.9))));
+  }
+
+  // --- title at DROP ---
+  title.forEach((g, i) => {
+    const k = spring(prog(t, DROP + i * .18, DROP + i * .18 + 1.2) * 1.5), out = eIn(prog(t, OUTRO - .4, OUTRO + .2));
+    g.position.set(0, (i === 0 ? 1.45 : .2) + (1 - k) * -1.5 + .04 * Math.sin(t * 2 + i), lerp(-6, 0, k));
+    g.rotation.set(.12 * Math.sin(t * .9 + i) * (1 - out), lerp(i ? -1.4 : 1.4, 0, k) + .18 * Math.sin(t * .7 + i * 1.5), 0);
+    g.scale.setScalar(Math.max(.001, k * (1 + kickPulse * .03) * (1 - out)));
+    setOpacity(g, clamp(prog(t, DROP + i * .18, DROP + i * .18 + .2)) * (1 - out));
+  });
+
+  // --- diya ring orbiting the title ---
+  { const k = eOut(prog(t, DROP + .3, DROP + 1.4)), out = eIn(prog(t, OUTRO - .4, OUTRO + .1));
+    diyaRing.visible = k > .01 && out < 1; diyaRing.position.set(0, .6, 0); diyaRing.rotation.set(.32, t * .6, 0);
+    ringDiyas.forEach((d, i) => { const a = i / 8 * Math.PI * 2; d.position.set(Math.cos(a) * 3.1 * k, -1.3 + .1 * Math.sin(t * 2 + i), Math.sin(a) * 3.1 * k); d.rotation.y = -a; d.scale.setScalar(.9 * k * (1 - out) + .001); setFlame(d.userData.flame, t, k * (1 - out), i); }); }
+
+  // --- petals: burst at DROP, slow fall during OUTRO ---
+  for (let i = 0; i < NP; i++) {
+    const p = PD[i]; let s = 0;
+    const tb = t - DROP;
+    if (tb > 0 && t < OUTRO + 1) { const dr = 1 - Math.exp(-tb * 1.6);
+      tmpP.set(p.v.x * dr / 1.6, .5 + p.v.y * dr / 1.6 - .9 * tb * tb * .5 * .5, p.v.z * dr / 1.6 - 2.2); s = p.s * clamp(1 - (t - OUTRO) * 1.2) * clamp(tb * 6); }
+    const tf = t - (OUTRO - .5);
+    if (tf > 0) { const y = 5.5 - ((tf * p.fs + p.fd) % 9); const s2 = (i % 2 ? 0 : p.s * .8) * clamp(tf * 2); if (s2 > s * .99 || t > OUTRO + .8) { tmpP.set(p.fx + Math.sin(t + p.fd) * .4, y, p.fz); s = s2; } }
+    tmpQ.setFromEuler(tmpE.set(p.rx + t * p.wr, p.ry + t * p.wr * .7, t));
+    tmpM.compose(tmpP, tmpQ, tmpS.setScalar(Math.max(.0001, s))); petals.setMatrixAt(i, tmpM);
+  }
+  petals.instanceMatrix.needsUpdate = true;
+
+  // --- logo ---
+  { const k = spring(prog(t, OUTRO + .1, OUTRO + 1.6) * 1.6), hov = Math.sin(t * 1.3) * .06;
+    logo.visible = k > .01; logo.position.set(0, 2.15 + hov, 0); logo.rotation.set(.12 * Math.sin(t * .8), lerp(Math.PI * 2, 0, k) + .2 * Math.sin(t * .6), 0); logo.scale.setScalar(Math.max(.001, k * .95)); }
+
+  // --- backdrop ---
+  for (let i = 0; i < NBK; i++) { const b = BK[i]; tmpP.copy(b.p); tmpP.y += Math.sin(t * .3 + b.ph) * .5 - t * .08 * b.s;
+    tmpQ.copy(camera.quaternion); tmpM.compose(tmpP, tmpQ, tmpS.setScalar(b.s * (1 + .3 * Math.sin(t * 1.5 + b.ph)) * (1 + kickPulse * .2) * clamp(t / 1.5) * .8)); bokeh.setMatrixAt(i, tmpM); }
+  bokeh.instanceMatrix.needsUpdate = true;
+  backGlow.material.opacity = .05 + .04 * rise + .06 * bass * (t > HIT ? 1 : 0);
+  backGlow.material.color.set(t > DROP && t < OUTRO ? 0xff6a3d : t >= OUTRO ? 0x7a5cff : 0xff7a2a);
+  backGlow.position.copy(camera.position).addScaledVector(camera.getWorldDirection(new THREE.Vector3()), 22);
+
+  key.intensity = 1.1 + .4 * kickPulse; amb.intensity = .06 + .15 * prog(t, OUTRO, OUTRO + 1);
+  bloom.strength = .55 + .35 * kickPulse + (t > HIT - .3 && t < HIT + .3 ? .5 : 0);
+
+  composer.render();
+
+  // ---------- DOM layer ----------
+  css($('presents'), prog(t, .3, .9) * (1 - prog(t, 1.4, 1.9)), `translateY(${(1 - eOut(prog(t, .3, .9))) * 30}px)`);
+  for (const c of CAPS) {
+    const k = prog(t, c.t0 - .25, c.t0 + .15) * (1 - prog(t, c.t1, c.t1 + .3));
+    css(c.el, k, `translateY(${(1 - eOut(prog(t, c.t0 - .25, c.t0 + .2))) * 60}px) scale(${.94 + .06 * eOut(prog(t, c.t0 - .25, c.t0 + .2))})`);
+    if (k > 0) c.bars.forEach((b, i) => { b.style.height = (4 + 22 * clamp(vo(t) * (.5 + .5 * Math.abs(Math.sin(i * 1.7 + t * 9)))) ) + 'px'; });
+  }
+  const tk = prog(t, DROP + .7, DROP + 1.2) * (1 - prog(t, OUTRO - .4, OUTRO));
+  css($('t-en'), tk, `translateY(${(1 - eOut(prog(t, DROP + .7, DROP + 1.2))) * 40}px)`);
+  css($('t-sub'), prog(t, DROP + 1.1, DROP + 1.6) * (1 - prog(t, OUTRO - .4, OUTRO)), '');
+  const oK = (a) => eOut(prog(t, OUTRO + a, OUTRO + a + .6));
+  css($('brand'), oK(.7), `translateY(${(1 - oK(.7)) * 50}px)`);
+  css($('hd'), oK(1.0), `translateY(${(1 - oK(1.0)) * 40}px)`);
+  css($('svc'), oK(1.25), '');
+  css($('cta'), oK(1.5), `translateX(-50%) scale(${.9 + .1 * spring(prog(t, OUTRO + 1.5, OUTRO + 2.5) * 2)})`);
+  const hdr = prog(t, 1.0, 1.8) * (1 - prog(t, OUTRO, OUTRO + .5));
+  css($('header'), hdr, `translateY(${(1 - eOut(prog(t, 1, 1.8))) * -30}px)`);
+  css($('footer'), prog(t, 1.0, 1.8), '');
+  const fl = Math.max(Math.exp(-Math.max(0, t - HIT) * 7) * (t >= HIT - .06 ? 1 : 0) * .95, Math.exp(-Math.max(0, t - DROP) * 6) * (t >= DROP ? 1 : 0) * .8, Math.exp(-Math.max(0, t - OUTRO) * 6) * (t >= OUTRO ? 1 : 0) * .5);
+  css($('flash'), fl < .01 ? 0 : fl, '');
+  css($('fade'), Math.max(1 - prog(t, 0, .5), prog(t, DUR - .5, DUR)), '');
+}
+window.renderFrame = f => frame(f);
+window.ready = init().then(() => { frame(0); return true; });
+</script>
+</body></html>
